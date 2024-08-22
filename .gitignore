@@ -1,2 +1,4 @@
 .idea
 Pyth.OS
+__pycache__
+.env
