@@ -3,11 +3,11 @@ import sys
 
 from PyQt6.QtWidgets import QApplication
 
-import conf
-from ui.auth import AuthWindow
-from entities.main.drive import Drive
-from entities.main.superblock import Superblock
-from entities.files.bitmap import Bitmap
+from src import conf
+from src.ui.auth import AuthWindow
+from src.entities.main.drive import Drive
+from src.entities.main.superblock import Superblock
+from src.entities.files.bitmap import Bitmap
 
 
 if __name__ == '__main__':
