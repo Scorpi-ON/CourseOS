@@ -1,4 +1,19 @@
-.idea
+# Python
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Cache
+__pycache__/
+.ruff_cache/
+.mypy_cache/
+*.py[cod]
 Course.OS
-__pycache__
+
+# Env
 .env
+
+# Logs
+*.log

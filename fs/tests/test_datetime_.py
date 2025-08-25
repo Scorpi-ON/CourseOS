@@ -1,23 +1,23 @@
-import os
+from pathlib import Path
 
 import pytest
 
-from entities.files.datetime_ import Datetime
+from src.entities.files.datetime_ import Datetime
 
 
-def test_size():
+def test_size() -> None:
     assert Datetime.SIZE == 4
 
 
-def test_create_write_read():
+def test_create_write_read() -> None:
     with pytest.raises(AssertionError):
         Datetime(1 << 32)
     datetime = Datetime()
-    filename = 'test'
-    with open(filename, 'wb') as buf:
+    filename = Path("test")
+    with filename.open("wb") as buf:
         datetime.write(buf)
         assert buf.tell() == Datetime.SIZE
-    with open(filename, 'rb') as buf:
+    with filename.open("rb") as buf:
         new_datetime = Datetime.read(buf)
         assert datetime == new_datetime
-    os.remove(filename)
+    filename.unlink()

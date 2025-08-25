@@ -1,5 +1,5 @@
-import conf, tools
-from entities.dynamic.dynamic_entity import DynamicEntity
+from src import conf, tools
+from src.entities.dynamic.dynamic_entity import DynamicEntity
 
 
 class Group(DynamicEntity):
@@ -7,26 +7,23 @@ class Group(DynamicEntity):
     id = ADMIN_ID
 
     @classmethod
-    def _get_attrs(cls):
-        return 'id', 'name'
+    def _get_attrs(cls) -> tuple[str, ...]:
+        return "id", "name"
 
-    def __init__(
-            self,
-            name: str
-    ):
+    def __init__(self, name: str) -> None:
         self.id = Group.id
         Group.id += 1
         self.name = name
 
-    def __bytes__(self):
-        return tools.encode(f'{self.id} {self.name}')
+    def __bytes__(self) -> bytes:
+        return tools.encode(f"{self.id} {self.name}")
 
     @classmethod
-    def from_bytes(cls, bytes_):
+    def from_bytes(cls, bytes_: bytes) -> list["Group"]:
         lines = tools.decode(bytes_).splitlines()
         groups = []
         for line in lines:
-            id_, _, name = line.partition(' ')
+            id_, _, name = line.partition(" ")
             if int(id_) == Group.ADMIN_ID:
                 Group.id = Group.ADMIN_ID
             groups.append(Group(name))

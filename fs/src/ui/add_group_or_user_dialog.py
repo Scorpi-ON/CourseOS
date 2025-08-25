@@ -1,14 +1,22 @@
 import enum
 
-from PyQt6.QtWidgets import QMainWindow, QDialog, QLineEdit, QPushButton, QComboBox, QStackedWidget, QMessageBox, \
-    QTableWidgetItem
 from PyQt6 import uic
+from PyQt6.QtWidgets import (
+    QComboBox,
+    QDialog,
+    QLineEdit,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
+    QStackedWidget,
+    QTableWidgetItem,
+)
 
-import conf
-from entities.main.drive import Drive, ReservedInodeNum
-from entities.dynamic.group import Group
-from entities.dynamic.user import User
-from entities.dynamic.file import File
+from src import conf
+from src.entities.dynamic.file import File
+from src.entities.dynamic.group import Group
+from src.entities.dynamic.user import User
+from src.entities.main.drive import Drive, ReservedInodeNum
 
 
 class AdditionMode(enum.Enum):
@@ -17,15 +25,11 @@ class AdditionMode(enum.Enum):
 
 
 class AddGroupOrUserWindow(QDialog):
-    UI_FILE = 'ui/ui/add_group_or_user_dialog.ui'
+    UI_FILE = "ui/ui/add_group_or_user_dialog.ui"
 
     def __init__(
-            self,
-            parent: QMainWindow,
-            drive: Drive,
-            addition_mode: AdditionMode,
-            *items: QTableWidgetItem
-    ):
+        self, parent: QMainWindow, drive: Drive, addition_mode: AdditionMode, *items: QTableWidgetItem
+    ) -> None:
         super().__init__(parent)
         self.drive = drive
         self.group_id: int | None = None
@@ -39,8 +43,12 @@ class AddGroupOrUserWindow(QDialog):
         self.addBtn: QPushButton | None = None
         uic.loadUi(AddGroupOrUserWindow.UI_FILE, self)
         assert None not in (
-            self.stackedWidget, self.groupNameTxt,
-            self.loginTxt, self.groupCbx, self.passwordTxt, self.addBtn
+            self.stackedWidget,
+            self.groupNameTxt,
+            self.loginTxt,
+            self.groupCbx,
+            self.passwordTxt,
+            self.addBtn,
         )
         self.stackedWidget.setCurrentIndex(self.addition_mode.value)
         if self.addition_mode == AdditionMode.user:
@@ -50,7 +58,7 @@ class AddGroupOrUserWindow(QDialog):
                 user_id, group_id, login = items
                 self.user_id = int(user_id.text())
                 self.loginTxt.setText(login.text())
-            for group in self.drive.groups[conf.SYSTEM_USER_AND_GROUP_ID + 1:]:
+            for group in self.drive.groups[conf.SYSTEM_USER_AND_GROUP_ID + 1 :]:
                 self.groupCbx.addItem(group.name, group.id)
                 if group_id and group.id == int(group_id.text()):
                     self.groupCbx.setCurrentText(group.name)
@@ -63,9 +71,7 @@ class AddGroupOrUserWindow(QDialog):
                 group_id, group_name = items
                 self.groupNameTxt.setText(group_name.text())
                 self.group_id = int(group_id.text())
-            self.groupNameTxt.textChanged.connect(
-                lambda new_text: self.addBtn.setEnabled(bool(new_text))
-            )
+            self.groupNameTxt.textChanged.connect(lambda new_text: self.addBtn.setEnabled(bool(new_text)))
         self.addBtn.clicked.connect(self.save)
 
     @property
@@ -76,24 +82,20 @@ class AddGroupOrUserWindow(QDialog):
     def password(self) -> str:
         return self.passwordTxt.text()
 
-    def save(self):
+    def save(self) -> None:
         if self.addition_mode == AdditionMode.user:
             if self.user_id is None:
                 for user in self.drive.users:
                     if user.login == self.login:
                         QMessageBox(
                             QMessageBox.Icon.Critical,
-                            'Ошибка добавления пользователя',
-                            f'Пользователь «{self.login}» уже существует. Введите другой логин..',
+                            "Ошибка добавления пользователя",
+                            f"Пользователь «{self.login}» уже существует. Введите другой логин..",
                             QMessageBox.StandardButton.Ok,
-                            self
+                            self,
                         ).exec()
                         return
-                self.drive.users.append(User(
-                    self.groupCbx.currentData(),
-                    self.login,
-                    self.password
-                ))
+                self.drive.users.append(User(self.groupCbx.currentData(), self.login, self.password))
             else:
                 for user in self.drive.users:
                     if user.id == self.user_id:
@@ -109,10 +111,10 @@ class AddGroupOrUserWindow(QDialog):
                     if group.name == group_name:
                         QMessageBox(
                             QMessageBox.Icon.Critical,
-                            'Ошибка добавления группы',
-                            f'Группа «{group_name}» уже существует. Введите другое название.',
+                            "Ошибка добавления группы",
+                            f"Группа «{group_name}» уже существует. Введите другое название.",
                             QMessageBox.StandardButton.Ok,
-                            self
+                            self,
                         ).exec()
                         return
                 self.drive.groups.append(Group(group_name))
@@ -124,9 +126,5 @@ class AddGroupOrUserWindow(QDialog):
             self.drive.update_file(ReservedInodeNum.groups.value, File.to_bytes(self.drive.groups))
         self.close()
 
-    def addBtn_enabler(self):
-        self.addBtn.setEnabled(
-            bool(self.login)
-            and self.groupCbx.currentIndex() != -1
-            and bool(self.password)
-        )
+    def addBtn_enabler(self) -> None:
+        self.addBtn.setEnabled(bool(self.login) and self.groupCbx.currentIndex() != -1 and bool(self.password))

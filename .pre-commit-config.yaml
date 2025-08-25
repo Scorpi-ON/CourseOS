@@ -1,0 +1,27 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: Ruff format
+        entry: ruff format
+        language: system
+        types: [ python ]
+
+      - id: ruff-check-and-fix
+        name: Ruff check and fix
+        entry: ruff check
+        args: [ --fix ]
+        language: system
+        types: [ python ]
+
+      - id: mypy-type-check
+        name: MyPy type check
+        entry: mypy
+        language: system
+        types: [ python ]
+
+  - repo: "https://github.com/astral-sh/uv-pre-commit"
+    rev: 0.8.13
+    hooks:
+      - id: uv-lock
+        name: Update uv.lock

@@ -1,17 +1,24 @@
-from PyQt6.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, \
-    QListWidget, QListWidgetItem, QMessageBox, QPushButton
 from PyQt6 import uic
+from PyQt6.QtWidgets import (
+    QListWidget,
+    QListWidgetItem,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+)
 
-import conf
-from .file_dialog import FileDialog
-from .add_group_or_user_dialog import AddGroupOrUserWindow, AdditionMode
-from entities.main.drive import Drive
+from src import conf
+from src.entities.main.drive import Drive
+from src.ui.add_group_or_user_dialog import AddGroupOrUserWindow, AdditionMode
+from src.ui.file_dialog import FileDialog
 
 
 class MainWindow(QMainWindow):
-    UI_FILE = 'ui/ui/main.ui'
+    UI_FILE = "ui/ui/main.ui"
 
-    def __init__(self, drive: Drive):
+    def __init__(self, drive: Drive) -> None:
         super().__init__()
         self.drive = drive
         self.groupTable: QTableWidget | None = None
@@ -24,10 +31,16 @@ class MainWindow(QMainWindow):
         self.copyBtn: QPushButton | None = None
         uic.loadUi(MainWindow.UI_FILE, self)
         assert None not in (
-            self.fileList, self.groupTable, self.userTable, self.addGroupBtn,
-            self.addUserBtn, self.createFileBtn, self.deleteSelectedBtn, self.copyBtn
+            self.fileList,
+            self.groupTable,
+            self.userTable,
+            self.addGroupBtn,
+            self.addUserBtn,
+            self.createFileBtn,
+            self.deleteSelectedBtn,
+            self.copyBtn,
         )
-        self.setWindowTitle(f'{self.drive.current_user.login}@CourseOS')
+        self.setWindowTitle(f"{self.drive.current_user.login}@CourseOS")
         self.load_groups()
         self.load_users()
         self.load_files()
@@ -46,49 +59,45 @@ class MainWindow(QMainWindow):
         self.deleteSelectedBtn.clicked.connect(self.delete_selected)
         self.copyBtn.clicked.connect(self.copy_file)
 
-    def copy_file(self):
+    def copy_file(self) -> None:
         try:
             file = self.drive.get_file_by_name(self.fileList.selectedItems()[0].text())
             inode, content = self.drive.read_file(file.inode_num)
             filename = file.name
-            ext, _, filename = filename.rpartition('.')
-            filename += ' — копия'
+            ext, _, filename = filename.rpartition(".")
+            filename += " — копия"
             if ext:
-                filename += f'.{ext}'
-            self.drive.create_file(
-                content,
-                inode.rights,
-                filename
-            )
+                filename += f".{ext}"
+            self.drive.create_file(content, inode.rights, filename)
         except Exception as exception:
             QMessageBox(
                 QMessageBox.Icon.Critical,
-                'Ошибка копирования файла',
+                "Ошибка копирования файла",
                 str(exception),
                 QMessageBox.StandardButton.Ok,
-                self
+                self,
             ).show()
         else:
             self.load_files()
 
-    def btn_enabler(self):
+    def btn_enabler(self) -> None:
         is_selected = bool(self.fileList.selectedIndexes())
         self.deleteSelectedBtn.setEnabled(is_selected)
         self.copyBtn.setEnabled(is_selected)
 
-    def load_files(self):
+    def load_files(self) -> None:
         self.fileList.clear()
         for file in self.drive.root:
             self.fileList.addItem(file.name)
 
-    def load_groups(self):
+    def load_groups(self) -> None:
         self.groupTable.clearContents()
         for num, group in enumerate(self.drive.groups):
             self.groupTable.insertRow(num)
             self.groupTable.setItem(num, 0, QTableWidgetItem(str(group.id)))
             self.groupTable.setItem(num, 1, QTableWidgetItem(group.name))
 
-    def load_users(self):
+    def load_users(self) -> None:
         self.userTable.clearContents()
         for num, user in enumerate(self.drive.users):
             self.userTable.insertRow(num)
@@ -96,7 +105,7 @@ class MainWindow(QMainWindow):
             self.userTable.setItem(num, 1, QTableWidgetItem(str(user.group_id)))
             self.userTable.setItem(num, 2, QTableWidgetItem(user.login))
 
-    def edit_group(self):
+    def edit_group(self) -> None:
         row = self.groupTable.selectedItems()[0].row()
         if row == 0 or self.drive.current_user.group_id != conf.SYSTEM_USER_AND_GROUP_ID:
             return
@@ -104,14 +113,11 @@ class MainWindow(QMainWindow):
             self,
             self.drive,
             AdditionMode.group,
-            *[
-                self.groupTable.item(row, i)
-                for i in range(self.groupTable.columnCount())
-            ]
+            *[self.groupTable.item(row, i) for i in range(self.groupTable.columnCount())],
         ).exec()
         self.load_groups()
 
-    def edit_user(self):
+    def edit_user(self) -> None:
         row = self.userTable.selectedItems()[0].row()
         if row == 0 or self.drive.current_user.group_id != conf.SYSTEM_USER_AND_GROUP_ID:
             return
@@ -119,22 +125,19 @@ class MainWindow(QMainWindow):
             self,
             self.drive,
             AdditionMode.user,
-            *[
-                self.userTable.item(row, i)
-                for i in range(self.userTable.columnCount())
-            ]
+            *[self.userTable.item(row, i) for i in range(self.userTable.columnCount())],
         ).exec()
         self.load_users()
 
-    def add_group(self):
+    def add_group(self) -> None:
         AddGroupOrUserWindow(self, self.drive, AdditionMode.group).exec()
         self.load_groups()
 
-    def add_user(self):
+    def add_user(self) -> None:
         AddGroupOrUserWindow(self, self.drive, AdditionMode.user).exec()
         self.load_users()
 
-    def open_selected_file(self, item: QListWidgetItem):
+    def open_selected_file(self, item: QListWidgetItem) -> None:
         file_to_open = item.text()
         file = self.drive.get_file_by_name(file_to_open)
         try:
@@ -142,37 +145,29 @@ class MainWindow(QMainWindow):
             FileDialog(self, file.name, self.drive, file, inode, file_content).exec()
         except Exception as exception:
             QMessageBox(
-                QMessageBox.Icon.Critical,
-                'Ошибка работы с файлом',
-                str(exception),
-                QMessageBox.StandardButton.Ok,
-                self
+                QMessageBox.Icon.Critical, "Ошибка работы с файлом", str(exception), QMessageBox.StandardButton.Ok, self
             ).show()
         else:
             self.load_files()
 
-    def create_file(self):
+    def create_file(self) -> None:
         try:
-            FileDialog(self, 'Новый файл', self.drive).exec()
+            FileDialog(self, "Новый файл", self.drive).exec()
         except Exception as exception:
             QMessageBox(
-                QMessageBox.Icon.Critical,
-                'Ошибка создания файла',
-                str(exception),
-                QMessageBox.StandardButton.Ok,
-                self
+                QMessageBox.Icon.Critical, "Ошибка создания файла", str(exception), QMessageBox.StandardButton.Ok, self
             ).show()
         else:
             self.load_files()
 
-    def delete_selected(self):
+    def delete_selected(self) -> None:
         filename_to_delete = self.fileList.selectedItems()[0].text()
         button = QMessageBox(
             QMessageBox.Icon.Question,
-            'Удаление файла',
+            "Удаление файла",
             f'Вы действительно хотите удалить файл "{filename_to_delete}"?',
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            self
+            self,
         ).exec()
         if button == QMessageBox.StandardButton.Yes:
             try:
@@ -180,10 +175,10 @@ class MainWindow(QMainWindow):
             except Exception as exception:
                 QMessageBox(
                     QMessageBox.Icon.Critical,
-                    'Ошибка удаления файла',
+                    "Ошибка удаления файла",
                     str(exception),
                     QMessageBox.StandardButton.Ok,
-                    self
+                    self,
                 ).show()
             else:
                 self.load_files()

@@ -1,0 +1,46 @@
+[project]
+name = "CourseOS"
+version = "1.0.0"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "pyqt6>=6.9.1",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.17.1",
+    "pre-commit>=4.3.0",
+    "pytest>=8.4.1",
+    "ruff>=0.12.10",
+]
+
+[tool.mypy]
+disable_error_code = ["import-untyped"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "BLE001", # Blind exceptions
+    "COM812",  # Ruff formatter may conflict with this rule
+    "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107",  # Missing docstring
+    "D203",  # Conflicting with D211 which is preferred
+    "D212",  # Conflicting with D213 which is preferred
+    "FBT001", "FBT002",  # Boolean positional args
+    "INP001",  # Namespace packages
+    "RET504",  # Assignments before return can improve code readability
+    "RUF001",  # Russian letters are ok
+    "S101",  # Asserts in produtcion code are ok
+    "TRY003",  # Have no desire to create custom exception classes when there are suitable default ones, lol
+]
+
+[tool.ruff.format]
+line-ending = "lf"
+docstring-code-format = true
+quote-style = "double"
+indent-style = "space"
+
