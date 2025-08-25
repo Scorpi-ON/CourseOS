@@ -21,15 +21,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v5
 
-      - run: cd fs
-
       - name: Install uv
         uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
   
       - name: Install deps
+        working-directory: fs
         run: uv sync --frozen --no-dev
 
       - name: Run pyuic
-        run: find ./fs/src/ui/ui -type f -name *.ui -exec uv run -m PyQt6.uic.pyuic -x {} \; > /dev/null
+        working-directory: fs
+        run: find ./src/ui/ui -type f -name *.ui -exec uv run -m PyQt6.uic.pyuic -x {} \; > /dev/null
