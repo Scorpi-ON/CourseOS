@@ -1,14 +1,17 @@
 # CourseOS
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python versions](https://img.shields.io/badge/python-^3.11-blue)](https://python.org/)
+[![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![release](https://img.shields.io/github/v/release/Scorpi-ON/CourseOS?include_prereleases)](https://github.com/Scorpi-ON/CourseOS/releases)
+[![downloads](https://img.shields.io/github/downloads/Scorpi-ON/CourseOS/total)](https://github.com/Scorpi-ON/CourseOS/releases)
+[![code size](https://img.shields.io/github/languages/code-size/Scorpi-ON/CourseOS.svg)](https://github.com/Scorpi-ON/CourseOS)
+
+[![Ruff and MyPy checks](https://github.com/Scorpi-ON/CourseOS/actions/workflows/linters.yaml/badge.svg)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/linters.yaml)
+[![C++ build](https://github.com/Scorpi-ON/CourseOS/actions/workflows/cpp-build.yaml/badge.svg)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/cpp-build.yaml)
+[![PyQt UI compilation](https://github.com/Scorpi-ON/CourseOS/actions/workflows/ui-compile.yaml/badge.svg)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/ui-compile.yaml)
+[![CodeQL (Python, C++, GH Actions)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/codeql.yaml/badge.svg)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/codeql.yaml)
 
 Курсовой проект по операционным системам, продуктом которого является эмулятор файловой системы S5FS, а
-также межпроцессного взаимодействия
-
-> [!WARNING]
-> Проект предоставлен почти в том же виде, в котором был сдан. Для повторного использования желателен масштабный
-> рефакторинг.
+также межпроцессного взаимодействия.
 
 <details><summary><h2>Скриншоты</h2></summary>
     <h3>Эмулятор ФС</h3>
@@ -107,60 +110,66 @@
 
 ## Особенности реализации
 
-- [x] все требования реализованы
-- [x] эмулятор файловой системы кроссплатформенный, межпроцессное взаимодействие написано под Linux
-- [x] операции с бинарным файлом файловой системы покрыты тестами
-- [ ] ui-файлы сконвертированы в py-файлы для
-- [ ] внедрены инструменты управления зависимости и статического анализа кода
-- [ ] основные операции покрыты логами
-- [ ] запуск тестов при отправке изменений в GitHub
-- [ ] ...
+- [x] все требования соблюдены
+- [x] эмулятор файловой системы кроссплатформенный, межпроцессное взаимодействие написано под Linux- [x] операции с бинарным файлом файловой системы покрыты тестами
+- [x] интегрированы инструменты управления зависимости и статического анализа кода
+- [x] проверка качества кода посредством CI/CD пайплайнов и Git-хуков
 
 ## Стек
 
-- **[Python](https://www.python.org/)** — основной язык программирования
-- **[GNU C++](https://gcc.gnu.org/)** — компилятор C++ для иллюстрации межпроцессного взаимодействия
-- **[pytest](https://docs.pytest.org/en/stable/)** — фреймворк для тестирования
+- **Python** — основной язык программирования
+- **uv** — пакетный менеджер
+- **pytest** — фреймворк для тестирования
+- **Ruff** — инструмент для форматирования и анализа кода
+- **MyPy** — статический типизатор Python
+- **pre-commit** — фреймворк для настройки хуков Git
+- **GNU C++** — компилятор C++ для иллюстрации межпроцессного взаимодействия
 
 ## Установка и запуск
 
-0. Клонируйте репозиторий и перейдите в его папку.
-
 ### Эмулятор ФС
 
-1. Установите PyQt6, необходимый для запуска проекта:
+0. Клонируйте репозиторий и перейдите в папку эмулятора:
 
 ```shell
-pip install PyQt6 
+git clone git@github.com:Scorpi-ON/CourseOS.git
+cd CourseOS/fs
 ```
 
-2. Перейдите в папку с эмулятором ФС:
+1. Установите пакетный менеджер uv одним из способов. Например, для Windows:
 
 ```shell
-cd fs
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+2. Установите зависимости:
+
+```shell
+uv sync --frozen --no-dev
 ```
 
 3. Теперь запускать проект можно командой:
 
 ```shell
-python main.py
+uv run -m CourseOS
 ```
 
 ### Демо межпроцессного взаимодействия
 
-1. Перейдите в папку с файлами межпроцессного взаимодействия:
+0. Клонируйте репозиторий и перейдите в папку файлов межпроцессного взаимодействия:
 
 ```shell
-cd processes
+git clone git@github.com:Scorpi-ON/CourseOS.git
+cd CourseOS/processes
 ```
 
-2. Запуск демонстрации работы **каналов**:
+1. Запуск демонстрации работы **каналов**:
 
 ```shell
 g++ pipes.cpp -o pipes.out && ./pipes.out
 ```
 
-Запуск демонстрации работы **именованных каналов** (выполняется с двух терминалов, открытых параллельно):
+2. Запуск демонстрации работы **именованных каналов** (выполняется с двух терминалов, открытых параллельно):
 
 Ридер:
 
@@ -174,7 +183,7 @@ g++ named_pipes_reader.cpp -o named_pipes_reader.out && ./named_pipes_reader.out
 g++ named_pipes_writer.cpp -o named_pipes_writer.out && ./named_pipes_writer.out
 ```
 
-Запуск демонстрации работы **разделяемой памяти** (выполняется с двух терминалов, открытых параллельно):
+3. Запуск демонстрации работы **разделяемой памяти** (выполняется с двух терминалов, открытых параллельно):
 
 Ридер:
 
@@ -192,14 +201,26 @@ g++ shared_memory_writer.cpp -o shared_memory_writer.out && ./shared_memory_writ
 
 ### Эмулятор ФС
 
-Чтобы модифицировать проект, установите полный набор зависимостей, включая зависимости для разработки:
+Чтобы модифицировать проект, необходимо установить все зависимости, включая необходимые только для разработки:
 
 ```shell
-pip install -r requirements.txt
+uv sync
+pre-commit install --hook-type pre-commit --hook-type pre-push```
 ```
+
+Запустить форматирование кода, его линтинг и статический анализ типов можно следующими командами соответственно:
+
+```shell
+ruff format
+ruff check --fix
+mypy .
+```
+Эта операция производятся автоматически при коммитах.
 
 Для запуска всех автотестов выполните команду:
 
 ```shell
-pytest tests
+pytest CourseOS/tests
 ```
+
+Эта операция производятся автоматически при отправке изменений.

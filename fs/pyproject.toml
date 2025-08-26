@@ -32,6 +32,7 @@ ignore = [
     "D212",  # Conflicting with D213 which is preferred
     "FBT001", "FBT002",  # Boolean positional args
     "INP001",  # Namespace packages
+    "N999",  # CourseOS module name
     "RET504",  # Assignments before return can improve code readability
     "RUF001",  # Russian letters are ok
     "S101",  # Asserts in produtcion code are ok
