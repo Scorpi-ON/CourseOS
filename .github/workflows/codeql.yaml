@@ -10,11 +10,13 @@ on:
     branches: [ "main" ]
     paths:
       - "**.py"
+      - "**.cpp"
       - ".github/**"
   pull_request:
     branches: [ "main" ]
     paths:
       - "**.py"
+      - "**.cpp"
       - ".github/**"
   schedule:
     - cron: "0 0 * * 1"
@@ -37,6 +39,10 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         dependency-caching: true
+
+    - name: Build C++ project
+      if: matrix.language == 'cpp'
+      run: find . -type f -name "*.cpp" -exec g++ {} \;
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
