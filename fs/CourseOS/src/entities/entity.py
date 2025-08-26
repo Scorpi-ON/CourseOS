@@ -1,6 +1,6 @@
 import builtins
 from abc import ABC, abstractmethod
-from typing import BinaryIO, TypeVar
+from typing import BinaryIO, Self, TypeVar
 
 T = TypeVar("T", bound="Entity")
 
@@ -16,8 +16,7 @@ class Entity(ABC):  # noqa: PLW1641
         pass
 
     @classmethod
-    @abstractmethod
-    def read(cls: type[T], buf: BinaryIO, pos: int | None = None) -> T:
+    def read(cls, buf: BinaryIO, pos: int | None = None) -> Self:
         pass
 
     def __eq__(self, other: builtins.object) -> bool:

@@ -6,11 +6,11 @@ permissions:
 on:
   push:
     paths:
-      - ".github/workflows/linters.yaml"
+      - ".github/workflows/tests.yaml"
       - "**.py"
   pull_request:
     paths:
-      - ".github/workflows/linters.yaml"
+      - ".github/workflows/tests.yaml"
       - "**.py"
 
 jobs:

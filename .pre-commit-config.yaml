@@ -13,6 +13,7 @@ repos:
         entry: ruff format
         language: system
         types: [ python ]
+        stages: [ pre-commit ]
 
       - id: ruff-check-and-fix
         name: Ruff check and fix
@@ -20,15 +21,18 @@ repos:
         args: [ --fix ]
         language: system
         types: [ python ]
+        stages: [ pre-commit ]
 
       - id: mypy-type-check
         name: MyPy type check
         entry: mypy
         language: system
         types: [ python ]
+        stages: [ pre-commit ]
 
   - repo: "https://github.com/astral-sh/uv-pre-commit"
     rev: 0.8.13
     hooks:
       - id: uv-lock
         name: Update uv.lock
+        stages: [ pre-commit ]

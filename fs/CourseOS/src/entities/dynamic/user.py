@@ -35,7 +35,10 @@ class User(DynamicEntity):
             id_, group_id, login = data.split(" ", 2)
             if int(id_) == User.ADMIN_ID:
                 User.id = User.ADMIN_ID
-            users.append(User(int(group_id), login, password_hash=password_hash))
+            user = User(int(group_id), login, password_hash=password_hash)
+            user.id = int(id_)
+            User.id -= 1
+            users.append(user)
         return users
 
     def set_password(self, password: str) -> None:

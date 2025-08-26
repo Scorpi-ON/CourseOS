@@ -34,7 +34,7 @@ class Superblock(Entity):
         assert block_count % conf.BITS_IN_BYTE == 0
         self.fs_type = fs_type
         self.block_size = block_size
-        Block.size = block_size
+        Block.size_ = block_size
         self.inode_count = inode_count
         self.block_count = block_count
         self.free_inode_count = free_inode_count
@@ -57,8 +57,14 @@ class Superblock(Entity):
     def read(cls, buf: typing.BinaryIO, pos: int | None = None) -> "Superblock":
         tools.seek_if_pos(buf, pos)
         fs_type_size = tools.unpack("B", buf)[0]
+        assert type(fs_type_size) is int
         fs_type = tools.decode(buf.read(fs_type_size))
         block_size, inode_count, block_count, free_inode_count, free_block_count = tools.unpack(
             Superblock._TAIL_STRUCT_FMT, buf
         )
+        assert type(block_size) is int
+        assert type(inode_count) is int
+        assert type(block_count) is int
+        assert type(free_inode_count) is int
+        assert type(free_block_count) is int
         return Superblock(fs_type, block_size, inode_count, block_count, free_inode_count, free_block_count)

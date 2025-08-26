@@ -1,4 +1,4 @@
-import typing
+from typing import BinaryIO
 
 from CourseOS.src import conf, tools
 from CourseOS.src.entities.files.block import Block
@@ -69,9 +69,9 @@ class Bitmap(Block):
 
     @classmethod
     def read(
-        cls, buf: typing.BinaryIO, pos: int | None = None, bit_count: int | None = None, size: int | None = None
-    ) -> typing.Self:
-        assert (bit_count and size) or (size and not bit_count)
+        cls, buf: BinaryIO, pos: int | None = None, bit_count: int | None = None, size: int | None = None
+    ) -> "Bitmap":
+        assert (bit_count and not size) or (size and not bit_count)
         tools.seek_if_pos(buf, pos)
         if bit_count:
             assert bit_count % conf.BITS_IN_BYTE == 0

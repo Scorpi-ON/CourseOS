@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import BinaryIO, TypeVar
+from typing import BinaryIO, Self, TypeVar
 
 from CourseOS.src.entities.entity import Entity
 
@@ -11,8 +11,7 @@ class DynamicEntity(Entity):
         raise NotImplementedError
 
     @classmethod
-    @abstractmethod
-    def read(cls: type[T], buf: BinaryIO, pos: int | None = None) -> T:
+    def read(cls, buf: BinaryIO, pos: int | None = None) -> Self:
         pass
 
     @abstractmethod
@@ -21,7 +20,7 @@ class DynamicEntity(Entity):
 
     @classmethod
     @abstractmethod
-    def from_bytes(cls, bytes_: bytes) -> list[T]:
+    def from_bytes(cls: type[T], bytes_: bytes) -> list[T]:
         pass
 
     @classmethod

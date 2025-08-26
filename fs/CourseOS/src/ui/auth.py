@@ -7,7 +7,7 @@ from CourseOS.src.ui.main import MainWindow
 
 
 class AuthWindow(QMainWindow):
-    UI_FILE = "ui/ui/auth.ui"
+    UI_FILE = "CourseOS/src/ui/ui/auth.ui"
 
     def __init__(self, drive: Drive) -> None:
         super().__init__()

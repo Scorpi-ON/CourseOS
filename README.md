@@ -7,6 +7,7 @@
 
 [![Ruff and MyPy checks](https://github.com/Scorpi-ON/CourseOS/actions/workflows/linters.yaml/badge.svg)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/linters.yaml)
 [![C++ build](https://github.com/Scorpi-ON/CourseOS/actions/workflows/cpp-build.yaml/badge.svg)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/cpp-build.yaml)
+[![pytest tests](https://github.com/Scorpi-ON/CourseOS/actions/workflows/tests.yaml/badge.svg)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/tests.yaml)
 [![PyQt UI compilation](https://github.com/Scorpi-ON/CourseOS/actions/workflows/ui-compile.yaml/badge.svg)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/ui-compile.yaml)
 [![CodeQL (Python, C++, GH Actions)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/codeql.yaml/badge.svg)](https://github.com/Scorpi-ON/CourseOS/actions/workflows/codeql.yaml)
 

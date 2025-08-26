@@ -26,5 +26,8 @@ class Group(DynamicEntity):
             id_, _, name = line.partition(" ")
             if int(id_) == Group.ADMIN_ID:
                 Group.id = Group.ADMIN_ID
-            groups.append(Group(name))
+            group = Group(name)
+            group.id = int(id_)
+            Group.id -= 1
+            groups.append(group)
         return groups

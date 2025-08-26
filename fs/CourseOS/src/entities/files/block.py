@@ -5,7 +5,7 @@ from CourseOS.src.entities.entity import Entity
 
 
 class Block(Entity):
-    size = conf.BLOCK_SIZE
+    size_ = conf.BLOCK_SIZE
 
     @classmethod
     def _get_attrs(cls) -> tuple[str, ...]:
@@ -22,4 +22,4 @@ class Block(Entity):
     @classmethod
     def read(cls, buf: BinaryIO, pos: int | None = None) -> "Block":
         tools.seek_if_pos(buf, pos)
-        return Block(bytes_=buf.read(Block.size))
+        return Block(bytes_=buf.read(Block.size_))

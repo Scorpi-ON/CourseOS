@@ -40,7 +40,7 @@ class Drive(Entity):
         self, buf: typing.BinaryIO, superblock: Superblock, inode_bitmap: Bitmap, block_bitmap: Bitmap
     ) -> None:
         assert not buf.closed
-        assert not superblock.closed
+        # assert not superblock.closed ???
         assert superblock.inode_count == len(inode_bitmap)
         assert superblock.block_count == len(block_bitmap)
 

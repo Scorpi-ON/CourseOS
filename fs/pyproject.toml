@@ -33,11 +33,15 @@ ignore = [
     "FBT001", "FBT002",  # Boolean positional args
     "INP001",  # Namespace packages
     "N999",  # CourseOS module name
+    "PLR0913",  # "Too many" arguments
     "RET504",  # Assignments before return can improve code readability
-    "RUF001",  # Russian letters are ok
-    "S101",  # Asserts in produtcion code are ok
+    "RUF001",  # Russian letters
+    "S101",  # Asserts in produtcion
     "TRY003",  # Have no desire to create custom exception classes when there are suitable default ones, lol
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"CourseOS/src/ui/*" = ["N802"]
 
 [tool.ruff.format]
 line-ending = "lf"
