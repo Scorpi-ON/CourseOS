@@ -58,4 +58,4 @@ jobs:
 
       - name: Run MyPy
         working-directory: fs
-        run: mypy .
+        run: uv run -m mypy .
