@@ -29,12 +29,15 @@ jobs:
           enable-cache: true
 
       - name: Install Ruff
+        working-directory: fs
         run: uv tool install ruff
 
       - name: Run Ruff formatter
+        working-directory: fs
         run: ruff format
 
       - name: Run Ruff linter
+        working-directory: fs
         run: ruff check
 
   mypy:

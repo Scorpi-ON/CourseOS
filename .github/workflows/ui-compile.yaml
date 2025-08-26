@@ -32,4 +32,4 @@ jobs:
 
       - name: Run pyuic
         working-directory: fs
-        run: find ./src/ui/ui -type f -name *.ui -exec uv run -m PyQt6.uic.pyuic -x {} \; > /dev/null
+        run: find ./src/ui/ui -type f -name "*.ui" -exec uv run -m PyQt6.uic.pyuic -x {} \; > /dev/null

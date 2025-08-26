@@ -1,6 +1,13 @@
 repos:
   - repo: local
     hooks:
+      - id: cpp-build
+        name: Build C++ code
+        entry: g++
+        language: system
+        files: 'processes/*\.cpp$'
+        stages: [ pre-push ]
+
       - id: ruff-format
         name: Ruff format
         entry: ruff format
